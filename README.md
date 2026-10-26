@@ -66,17 +66,25 @@
 ├── gephi_edges.csv                             # Gephi 边导入（41 行）
 ├── 乾嘉学派学术传承网络节点表1.csv              # 节点表 CSV 导出
 ├── 乾嘉学派学术传承网络边表1.csv                # 边表 CSV 导出
-├── run_analysis.py                             # SNA 分析入口
-├── config.py / data_loader.py                  # 配置与数据加载
-├── topology.py / centrality.py                  # 拓扑与中心性
-├── communities.py / lineage.py                 # 社区检测与师承溯源
-├── multilayer.py / temporal.py                 # 多层网络与时代流向
-├── robustness.py / visualization.py / report.py # 鲁棒性、可视化、报告
+├── run_analysis.py                             # SNA 分析入口（python run_analysis.py）
+├── qianjia_sna/                               # 分析包 / Analysis package
+│   ├── __init__.py
+│   ├── config.py                              # 全局配置（路径、关系编码、时代分组）
+│   ├── data_loader.py                         # CSV 读取、数据质检与图构建
+│   ├── topology.py                           # 整体拓扑指标
+│   ├── centrality.py                         # 节点中心性 + Gephi 交叉校验
+│   ├── communities.py                        # Louvain 社区、k-核分解
+│   ├── lineage.py                             # 师承谱系与最长溯源链
+│   ├── multilayer.py                        # 五类关系层对比与跨层参与
+│   ├── temporal.py                           # 成书时代流向矩阵
+│   ├── robustness.py                         # 蓄意攻击/随机失效鲁棒性
+│   ├── visualization.py                     # matplotlib 静态图 + pyvis 交互图
+│   └── report.py                             # 中文 HTML 报告组装
 ├── 00_数据质量核查.csv ~ 16_原典被承继谱.csv     # 17 份分析结果
-├── network_interactive.html                    # 交互式网络图（pyvis）
-├── report_standalone.html                      # 自包含分析报告（~2 MB）
-├── 乾嘉学派...学术诚信标准的影响.pdf            # AI 文献综述
-├── requirements.txt                            # Python 依赖
+├── network_interactive.html                  # 交互式网络图（pyvis）
+├── report_standalone.html                     # 自包含分析报告（~2 MB）
+├── 乾嘉学派...学术诚信标准的影响.pdf           # AI 文献综述
+├── requirements.txt                          # Python 依赖
 ├── README.md / CITATION.cff / LICENSE / .gitignore
 ```
 
@@ -169,18 +177,18 @@ python run_analysis.py
 
 ## 分析代码模块 / Analysis Modules
 
-| 模块 | 职责 |
+| 模块 / Module | 职责 / Responsibility |
 | --- | --- |
-| `data_loader.py` | 从 xlsx 读取节点表与边表，构建 NetworkX DiGraph |
-| `topology.py` | 整体拓扑：节点数、边数、密度、直径、平均路径、度分布 |
-| `centrality.py` | 度/接近/中介/特征向量中心性排行 |
-| `communities.py` | Louvain 社区检测、社区画像、模块化系数 |
-| `lineage.py` | 师承授受明线、最长溯源链、溯源深度排行 |
-| `multilayer.py` | 析出层级交叉、跨层参与度、关系层对比 |
-| `temporal.py` | 时代流向矩阵、时代援引画像、原典被承继谱 |
-| `robustness.py` | 蓄意攻击/随机故障下的鲁棒性衰减曲线与半衰阈值 |
-| `visualization.py` | pyvis 交互式网络图、matplotlib 静态图 |
-| `report.py` | 汇总生成自包含 HTML 报告 |
+| `qianjia_sna/data_loader.py` | 从 CSV 读取节点表与边表，数据质检，构建 NetworkX DiGraph |
+| `qianjia_sna/topology.py` | 整体拓扑：节点数、边数、密度、直径、平均路径、度分布 |
+| `qianjia_sna/centrality.py` | 度/接近/中介/特征向量中心性排行，与 Gephi 指标 Spearman 交叉校验 |
+| `qianjia_sna/communities.py` | Louvain 社区检测、k-核分解、核心-边缘识别 |
+| `qianjia_sna/lineage.py` | 师承授受明线、最长溯源链、溯源深度排行 |
+| `qianjia_sna/multilayer.py` | 五类关系层对比、跨层参与度、析出层级交叉表 |
+| `qianjia_sna/temporal.py` | 成书时代流向矩阵、时代援引画像、原典被承继谱 |
+| `qianjia_sna/robustness.py` | 蓄意攻击/随机故障下的鲁棒性衰减曲线与半衰阈值 |
+| `qianjia_sna/visualization.py` | pyvis 交互式网络图、matplotlib 静态图 |
+| `qianjia_sna/report.py` | 汇总生成自包含中文 HTML 报告 |
 
 ---
 
