@@ -53,7 +53,7 @@
 | 边数 / Edges | 41（E-001 ~ E-041） |
 | 节点层级 / Node Levels | 一级（完整著作）· 二级（单篇析出）· 三级（残卷） |
 | 关系大类 / Relation Categories | 版本源流 · 注疏阐释 · 学术传承 · 方法支撑 · 引文参考 |
-| 分析产物 / Analysis outputs | 17 份 CSV + 交互式 HTML 报告 |
+| 分析产物 / Analysis outputs | 17 份 CSV + 6 张分析图 + 交互式网络图 + 双 HTML 报告 |
 
 ---
 
@@ -80,13 +80,20 @@
 │   ├── robustness.py                         # 蓄意攻击/随机失效鲁棒性
 │   ├── visualization.py                     # matplotlib 静态图 + pyvis 交互图
 │   └── report.py                             # 中文 HTML 报告组装
-├── 00_数据质量核查.csv ~ 16_原典被承继谱.csv     # 17 份分析结果
-├── network_interactive.html                  # 交互式网络图（pyvis）
-├── report_standalone.html                     # 自包含分析报告（~2 MB）
+├── 00_数据质量核查.csv ~ 16_原典被承继谱.csv     # 17 份分析结果（预生成快照 / pre-generated snapshot）
+├── network_interactive.html                  # 交互式网络图（pyvis，快照）
+├── report_standalone.html                     # 自包含分析报告（~2 MB，快照，可单独分发）
+├── output/                                   # 运行 run_analysis.py 生成的完整产物 / full pipeline outputs
+│   ├── tables/                               # 17 份 CSV
+│   ├── figures/                              # 6 张 matplotlib 分析图
+│   ├── interactive/                          # 交互式网络图
+│   └── report.html / report_standalone.html  # 双 HTML 报告
 ├── 乾嘉学派...学术诚信标准的影响.pdf           # AI 文献综述
 ├── requirements.txt                          # Python 依赖
 ├── README.md / CITATION.cff / LICENSE / .gitignore
 ```
+
+> 注：根目录下的分析 CSV 与 HTML 为**预生成快照**，便于不运行代码直接取用；`output/` 为运行管线的完整产物目录，两者内容一致。
 
 ---
 
@@ -138,13 +145,25 @@
 
 ## 网络统计 / Network Statistics
 
-由 Gephi 与 Python（NetworkX）双重计算：
+由 Gephi 与 Python（NetworkX）双重计算，两种口径并列如下 / Computed by both Gephi and Python (NetworkX):
 
-- 平均度 / Average Degree: **1.025**
+**Gephi 口径**（含 11 个孤立节点的全图，手工配色 5 组 / full graph incl. 11 isolates, 5 hand-colored groups）:
+
+- 平均度（单侧）/ Average Degree: **1.025**
 - 网络直径 / Network Diameter: **5**
-- 模块化系数 / Modularity: **0.521**（5 个社区）
+- 模块化系数 / Modularity: **0.521**
 - 平均路径长度 / Average Path Length: **2.05**
-- 社区分布: 乾嘉核心派（绿）· 训诂辞书派（紫）· 古音学派（蓝）· 十三经原典（灰）· 近现代派（橙）
+- 手工配色分组 / Hand-colored groups: 乾嘉核心派（绿）· 训诂辞书派（紫）· 古音学派（蓝）· 十三经原典（灰）· 近现代派（橙）
+
+**Python（NetworkX）口径**（详见 `01_整体拓扑指标.csv`、`05_社区画像.csv`）:
+
+- 平均总度（入+出）/ Average Total Degree: **2.05**（Gephi 的 1.025 为单侧均值）
+- 主分量直径（无向）/ Diameter of Largest Component: **6**
+- 平均路径长度（主分量）/ Avg Path Length: **2.8**（最大弱连通分量 26 节点）
+- Louvain 模块度 Q: **0.521**，活跃子图聚为 **4 个学群**，与节点表内置 Gephi modularity_class 划分的 NMI = **1.0**（交叉验证）
+- 度 / 介数 / 聚类系数与 Gephi 结果 Spearman 秩相关 **ρ = 1.0**（`03_Gephi一致性校验.csv`）
+
+> **口径说明 / Note**：Gephi 的连通性指标在含孤立节点的全图上计算，Python 主分量口径仅计入 26 节点的最大弱连通分量，故直径与平均路径数值不同；两套引擎共有的指标（度、介数、聚类、模块度）完全一致。Gephi 的 modularity_class 在 29 个活跃节点上恰为 4 类（其余 12 类均为孤立节点各自成类），与 Louvain 结果一一对应。
 
 ---
 
@@ -171,7 +190,14 @@ pip install -r requirements.txt
 python run_analysis.py
 ```
 
-运行后会在当前目录生成 / 更新 `00_*.csv` ~ `16_*.csv` 分析结果、`network_interactive.html` 和 `report_standalone.html`。
+运行后会在 **`output/` 目录**生成完整产物 / Full outputs are written to `output/`:
+
+- `output/tables/`：00_数据质量核查.csv ~ 16_原典被承继谱.csv 共 17 份分析 CSV
+- `output/figures/`：6 张 matplotlib 分析图（网络总览、中心性、社区、鲁棒性、时代流向、关系层）
+- `output/interactive/network_interactive.html`：交互式网络图
+- `output/report.html` 与 `output/report_standalone.html`：多文件版与单文件自包含版报告
+
+仓库根目录下的 `00_*.csv`、`network_interactive.html`、`report_standalone.html` 为**预生成快照**（已含全部内嵌图片），不运行代码也可直接取用 / Root-level CSV & HTML files are pre-generated snapshots for direct reuse without running the pipeline.
 
 ---
 
