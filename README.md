@@ -247,7 +247,19 @@ python run_analysis.py
 > Lin, J. (2026). *Qianjia School Academic Transmission Literature Network* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.XXXXXXX
 
 > **注**：DOI 为预留位，正式发布后请替换。详见 `CITATION.cff`。
+## 项目依赖：
+> 数据清洗与处理 MarkItDown、pandas（openpyxl）、numpy
+> 网络建模 ：networkx 、gephi（可自选）
+> 可视化： matplotlib（可自选）、seaborn（可自选）、pyvis
+>深度学习： DGL、PyTorch Geometric（可自选）
+>全网检索与对接：requests、openai-python （可自选）
+> ai：古汉语大模型 - AI 太炎 https://t.shenshen.wiki/
+>知乎开放数据平台Zhihu Data Open Platform：https://developer.zhihu.com
+>知网研学开放平台CNKI Research Data Open Platform：https://openx.cnki.net/
 
+>[1] 舒蕾, 郭懿鸾, 王慧萍, 张学涛, 胡韧奋. 古汉语词义标注语料库的构建及应用研究[J]. 中文信息学报, 2022, 36(05).https://github.com/iris2hu/ancient_chinese_sense_annotation
+
+>[2]莫凯洁, 丘子靓, 胡韧奋, 王予沛. 古汉语典故资源库的构建及应用研究[J]. 中文信息学报, 2024, 38(11).https://github.com/KaijieMo-kj/Ancient-Chinese-Allusion-Resource-Database
 ---
 
 ## 许可证 / License
